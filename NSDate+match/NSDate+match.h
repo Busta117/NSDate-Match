@@ -1,17 +1,18 @@
-NSDate-Match
-============
+//
+//  NSDate+match.h
+//  
+//
+//  Created by Santiago Bustamante on 11/21/13.
+//  Copyright (c) 2013 Busta. All rights reserved.
+//
 
-NSDate comparations and extens 
+#import <Foundation/Foundation.h>
 
-#### Podfile
+@interface NSDate (match)
 
-```ruby
-pod "NSDate+Match"
-```
+-(NSString *)stringWithFormat:(NSString *)format;
++(NSDate *)dateFromString:(NSString*)string withFormat:(NSString *)format;
 
-####Methods
-
-```objective-c
 - (BOOL)isSameDayThanDate:(NSDate*)date;
 - (NSDate *)nextDay;
 - (NSDate *)lastDay;
@@ -34,4 +35,5 @@ pod "NSDate+Match"
 - (BOOL) isSameHour:(int) hourIn;
 
 - (BOOL)isSameYearThanDate:(NSDate*)date;
-```
+
+@end
