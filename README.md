@@ -12,6 +12,9 @@ pod "NSDate+Match"
 ####Methods
 
 ```objective-c
++(NSDate *)dateFromString:(NSString*)string withFormat:(NSString *)format;
+-(NSString *)stringWithFormat:(NSString *)format;
+
 - (BOOL)isSameDayThanDate:(NSDate*)date;
 - (NSDate *)nextDay;
 - (NSDate *)lastDay;
