@@ -76,7 +76,7 @@
 #pragma mark - week section
 
 - (BOOL)isSameWeekThanDate:(NSDate*)date {
-    NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
     
     unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth |  NSCalendarUnitWeekOfYear;
     NSDateComponents* comp1 = [calendar components:unitFlags fromDate:[self firstDayOfWeek]];
@@ -87,8 +87,12 @@
 
 
 - (NSDate *)firstDayOfWeek{
-    BOOL weekStartMonday = YES;
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    return [self firstDayOfWeekStartingMonday:YES];
+}
+
+
+- (NSDate *)firstDayOfWeekStartingMonday:(BOOL)weekStartMonday{
+    NSCalendar *gregorian = [NSCalendar currentCalendar];
     NSDateComponents *weekdayComponents = [gregorian components:NSCalendarUnitWeekday fromDate:self];
     
     
@@ -102,61 +106,40 @@
 }
 
 
+
 - (NSDate *)lastDayOfWeek{
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    return [self lastDayOfWeekStartingMonday:YES];
+}
+
+- (NSDate *)lastDayOfWeekStartingMonday:(BOOL)weekStartMonday{
+    NSCalendar *gregorian = [NSCalendar currentCalendar];
     
-    NSDateComponents *componentsToAdd = [gregorian components:NSDayCalendarUnit fromDate:[self firstDayOfWeek]];
+    NSDateComponents *componentsToAdd = [gregorian components:NSDayCalendarUnit fromDate:[self firstDayOfWeekStartingMonday:weekStartMonday]];
     [componentsToAdd setDay:6];
-    NSDate *endOfWeek = [gregorian dateByAddingComponents:componentsToAdd toDate:[self firstDayOfWeek] options:0];
+    NSDate *endOfWeek = [gregorian dateByAddingComponents:componentsToAdd toDate:[self firstDayOfWeekStartingMonday:weekStartMonday] options:0];
     
     return endOfWeek;
 }
 
 
 - (NSDate *)nextWeek{
-    // start by retrieving day, weekday, month and year components for yourDate
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDateComponents *todayComponents = [gregorian components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:self];
-    NSInteger theDay = [todayComponents day];
-    NSInteger theMonth = [todayComponents month];
-    NSInteger theYear = [todayComponents year];
-    
-    // now build a NSDate object for yourDate using these components
-    NSDateComponents *components = [[NSDateComponents alloc] init];
-    [components setDay:theDay];
-    [components setMonth:theMonth];
-    [components setYear:theYear];
-    NSDate *thisDate = [gregorian dateFromComponents:components];
-    
+    NSCalendar *gregorian = [NSCalendar currentCalendar];
     
     // now build a NSDate object for the next week
     NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
     [offsetComponents setDay:7];
-    NSDate *nextDate = [gregorian dateByAddingComponents:offsetComponents toDate:thisDate options:0];
+    NSDate *nextDate = [gregorian dateByAddingComponents:offsetComponents toDate:self options:0];
     
     return nextDate;
 }
 
 - (NSDate *)lastWeek{
-    // start by retrieving day, weekday, month and year components for yourDate
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDateComponents *todayComponents = [gregorian components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:self];
-    NSInteger theDay = [todayComponents day];
-    NSInteger theMonth = [todayComponents month];
-    NSInteger theYear = [todayComponents year];
-    
-    // now build a NSDate object for yourDate using these components
-    NSDateComponents *components = [[NSDateComponents alloc] init];
-    [components setDay:theDay];
-    [components setMonth:theMonth];
-    [components setYear:theYear];
-    NSDate *thisDate = [gregorian dateFromComponents:components];
-    
+    NSCalendar *gregorian = [NSCalendar currentCalendar];
     
     // now build a NSDate object for the next week
     NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
     [offsetComponents setDay:-7];
-    NSDate *nextDate = [gregorian dateByAddingComponents:offsetComponents toDate:thisDate options:0];
+    NSDate *nextDate = [gregorian dateByAddingComponents:offsetComponents toDate:self options:0];
     
     return nextDate;
 }
@@ -166,7 +149,7 @@
     numDayIn = numDayIn == 8 ? 1 : numDayIn;
     
     
-    NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
     
     unsigned unitFlags = NSCalendarUnitWeekday;
     NSDateComponents *comp1 = [calendar components:unitFlags fromDate:self];
@@ -190,49 +173,23 @@
 
 
 - (NSDate *)nextMonth{
-    // start by retrieving day, weekday, month and year components for yourDate
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDateComponents *todayComponents = [gregorian components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:self];
-    NSInteger theDay = [todayComponents day];
-    NSInteger theMonth = [todayComponents month];
-    NSInteger theYear = [todayComponents year];
-    
-    // now build a NSDate object for yourDate using these components
-    NSDateComponents *components = [[NSDateComponents alloc] init];
-    [components setDay:theDay];
-    [components setMonth:theMonth];
-    [components setYear:theYear];
-    NSDate *thisDate = [gregorian dateFromComponents:components];
-    
+    NSCalendar *gregorian = [NSCalendar currentCalendar];
     
     // now build a NSDate object for the next day
     NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
     [offsetComponents setMonth:1];
-    NSDate *nextDate = [gregorian dateByAddingComponents:offsetComponents toDate:thisDate options:0];
+    NSDate *nextDate = [gregorian dateByAddingComponents:offsetComponents toDate:self options:0];
     
     return nextDate;
 }
 
 - (NSDate *)lastMonth{
-    // start by retrieving day, weekday, month and year components for yourDate
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDateComponents *todayComponents = [gregorian components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:self];
-    NSInteger theDay = [todayComponents day];
-    NSInteger theMonth = [todayComponents month];
-    NSInteger theYear = [todayComponents year];
-    
-    // now build a NSDate object for yourDate using these components
-    NSDateComponents *components = [[NSDateComponents alloc] init];
-    [components setDay:theDay];
-    [components setMonth:theMonth];
-    [components setYear:theYear];
-    NSDate *thisDate = [gregorian dateFromComponents:components];
-    
+    NSCalendar *gregorian = [NSCalendar currentCalendar];
     
     // now build a NSDate object for the next day
     NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
     [offsetComponents setMonth:-1];
-    NSDate *nextDate = [gregorian dateByAddingComponents:offsetComponents toDate:thisDate options:0];
+    NSDate *nextDate = [gregorian dateByAddingComponents:offsetComponents toDate:self options:0];
     
     return nextDate;
 }
@@ -263,7 +220,7 @@
 - (BOOL) isSameMonthday:(int)numDayIn{
     numDayIn += 1;
     
-    NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
     
     unsigned unitFlags = NSCalendarUnitDay;
     NSDateComponents *comp1 = [calendar components:unitFlags fromDate:self];
@@ -286,6 +243,16 @@
     return NO;
     
 }
+
+- (BOOL) isSameHourThanDate:(NSDate*)date{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *comp1 = [calendar components:(NSCalendarUnitHour) fromDate:self];
+    NSDateComponents* comp2 = [calendar components:(NSCalendarUnitHour) fromDate:date];
+    
+    return [comp1 hour]  == [comp2 hour];
+    
+}
+
 
 
 #pragma mark - year section
